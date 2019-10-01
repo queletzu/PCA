@@ -1,0 +1,19 @@
+# Es importante tener los datos en un df, con las variables de interes que queremos graficar
+# 
+
+#m<-data.frame(getM(MSetQsinXY))
+# los mVals son los datos crudos por cada individuo
+bt<-t(mVals)
+#prcomp hace el análisis de componentes y obtiene los eigenvalores para cuantas dimensiones queramos 
+#"Performs a principal components analysis on the given data matrix and returns the results as an object of class prcomp.
+pcab<-prcomp(bt)
+#podemos ver que tanto del porcentaje de variación explican los primeros dos componentes y posteriormente graficamos
+g<-summary(pcab)
+g
+w<-g$importance
+x<-g$x
+pci<-data.frame( Targ, pcab$x, w)
+###GRAFICA
+ggplot(pci, aes(x=PC1,y=PC2, size=edad)) +
+         geom_point( aes(shape=factor(Sample_Group), colour=factor(genero))) +
+        labs( title = "PCA Mvalues", x = "PC1", caption = w[2,1], y = "PC2", subtitle  = w[2,2]) 
